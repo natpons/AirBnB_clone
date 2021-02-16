@@ -5,6 +5,7 @@ import unittest
 import pep8
 from datetime import datetime
 from models.engine.file_storage import FileStorage
+from models.user import User
 from models import storage
 
 
@@ -29,11 +30,16 @@ class FileStorageTest(unittest.TestCase):
         self.assertTrue(hasattr(FileStorage, "save"))
         self.assertTrue(hasattr(FileStorage, "reload"))
 
-    def test_all(self):
-        """Test the all method"""
+    def test_obj(self):
+        """Test the obj"""
+        storage = FileStorage()
+        obj = storage.all()
+        self.assertIsNotNone(obj)
+        self.assertEqual(type(obj), dict)
+        self.assertIs(obj, storage._FileStorage__objects)
 
-    def test_new(self):
-        """Tests the new method"""
+    def test_all(self):
+        """Tests the all method"""
 
     def test_save(self):
         """Tests for the save method"""
