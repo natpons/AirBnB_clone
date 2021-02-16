@@ -43,12 +43,12 @@ class BaseModel:
         """Convert INSTANCE into DICT FORMAT containing all keys/values :
         create a dictionary representation with "simple object type
         of our BaseModel"""
-        basemodel_dict = {}
-        basemodel_dict["__class__"] = self.__class__.__name__
+        model_dict = {}
+        model_dict["__class__"] = self.__class__.__name__
 
         if self.__dict__:
             for key, value in self.__dict__.items():
                 if isinstance(value, datetime):
                     value = value.isoformat()
-                basemodel_dict[key] = value
-        return basemodel_dict
+                model_dict[key] = value
+        return model_dict
