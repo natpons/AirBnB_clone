@@ -10,6 +10,16 @@ from models.base_model import BaseModel
 class BaseModelTest(unittest.TestCase):
     """Defines tests for class BaseModel"""
 
+    def test_init_BaseModel(self):
+        """Test if instance of BaseModel successfully made"""
+        self.assertTrue(isinstance(BaseModel(), BaseModel))
+
+    def test_instance(self):
+        """Test isinstance for all attributes"""
+        self.assertIsInstance(BaseModel().id, str)
+        self.assertIsInstance(BaseModel().created_at, datetime)
+        self.assertIsInstance(BaseModel().updated_at, datetime)
+
     def test_pep8(self):
         """Test pep8 compliance"""
         style = pep8.StyleGuide(quit=True)
@@ -31,16 +41,12 @@ class BaseModelTest(unittest.TestCase):
         self.assertTrue(hasattr(BaseModel, "save"))
         self.assertTrue(hasattr(BaseModel, "to_dict"))
 
-    def test_init_BaseModel(self):
-        """Test if instance of BaseModel successfully made"""
-        self.assertTrue(isinstance(BaseModel(), BaseModel))
-
     def test_to_dict(self):
         """Test convert to dictionary"""
-        base_dict = BaseModel().to_dict()
+        my_dict = BaseModel().to_dict()
         self.assertEqual(BaseModel().__class__.__name__, 'BaseModel')
-        self.assertIsInstance(base_dict['created_at'], str)
-        self.assertIsInstance(base_dict['updated_at'], str)
+        self.assertIsInstance(my_dict['created_at'], str)
+        self.assertIsInstance(my_dict['updated_at'], str)
 
     def test_id(self):
         """Tests for id: basic id init, is str, random"""
@@ -57,6 +63,24 @@ class BaseModelTest(unittest.TestCase):
         """Tests for created_at"""
         self.assertIsNotNone(BaseModel().updated_at)
         self.assertEqual(type(BaseModel().updated_at), datetime)
+
+    def test_str(self):
+        """Tests for the str method"""
+        self.assertIsNotNone(BaseModel().__str__)
+        self.assertIsInstance(BaseModel().__str__(), str)
+
+    def test_save(self):
+        """Tests for the save method"""
+        test1 = BaseModel().updated_at
+        BaseModel().save()
+        self.assertFalse(BaseModel().updated_at == test1)
+
+    def test_to_dict(self):
+        """Tests for to_dict method"""
+        self.assertIsNotNone(BaseModel().to_dict())
+        self.assertEqual(type(BaseModel().to_dict()), dict)
+        self.assertEqual(type(BaseModel().to_dict()['created_at']), str)
+        self.assertEqual(type(BaseModel().to_dict()['updated_at']), str)
 
 if __name__ == '__main__':
     unittest.main()
