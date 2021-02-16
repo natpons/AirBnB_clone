@@ -4,7 +4,7 @@ import cmd
 import models
 from models import storage
 from models.base_model import BaseModel
-from models.use import User
+from models.user import User
 
 models_names = ['BaseModel', 'User']
 
@@ -16,30 +16,28 @@ class HBNBCommand(cmd.Cmd):
     def do_create(self, line):
         """CREATES a new instance of BaseModel, saves it to the JSON file and
         prints the id. Ex: $ create BaseModel
-        - split input line, check len, eval
-        - while:
-        - setattr, storage: new + save, print id"""
-        items = line.split(" ")
-        if len(items) == 0:
+        - split input line, eval, save, id"""
+        args = line.split(" ")
+        if len(args) == 0:
             print("** class name missing **")
             return
-        if items[1] in models_names:
-            inst = eval(items[1] + "()")
-            i = 1
-
-            while i < len(items):
-                p = items[i]
-                list_p = p.split("=")
-                p1 = list_p[0]
-                p2 = list_p[1]
-                setattr(inst, p1, p2)
-                i = i + 1
-
-                storage.new(inst)
-                storage.save()
-                print(inst.id)
+        if args[0] in models_names:
+            model = eval(args[0] + "()")
+            storage.save()
+            print(model.id)
         else:
             print("** class doesn't exist **")
+
+    def do_show(self, line):
+        """PRINTS the string representation of an instance based on the
+        class name and id.
+        Ex: $ show BaseModel 1234-1234-1234"""
+
+    def do_destroy(self, line):
+        """DELETES an instance based on the class name and id
+        (save the change into the JSON file).
+        Ex: $ destroy BaseModel 1234-1234-1234"""
+        args = line.split()
 
     def do_EOF(self, line):
         """EOF command to exit the program"""
