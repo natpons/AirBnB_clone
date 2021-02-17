@@ -5,25 +5,30 @@ import models
 from models import storage
 from models.base_model import BaseModel
 from models.user import User
-
-models_names = ['BaseModel', 'User']
+from models.state import State
+from models.city import City
+from models.amenity import Amenity
+from models.place import Place
+from models.review import Review
 
 
 class HBNBCommand(cmd.Cmd):
     """Command interpreter/Contains the functionality for the HBNB console"""
     prompt = '(hbnb) '
+    classes = {'BaseModel': BaseModel, 'User': User,
+               'State': State, 'City': City,
+               'Amenity': Amenity, 'Place': Place, 'Review': Review}
 
     def do_create(self, line):
-        """CREATES a new instance of BaseModel, saves it to the JSON file and
-        prints the id. Ex: $ create BaseModel
-        - split input line, eval, save, id"""
-        args = line.split(" ")
-        if len(args) == 0:
+        """CREATES a new instance of BaseModel, SAVE IT to the JSON file and
+        prints the id.
+        Ex: $ create BaseModel"""
+        if len(line) < 1:
             print("** class name missing **")
             return
-        if args[0] in models_names:
-            model = eval(args[0] + "()")
-            storage.save()
+        if line in HBNBCommand.classes:
+            model = eval(line + "()")
+            model.save()
             print(model.id)
         else:
             print("** class doesn't exist **")
@@ -32,12 +37,34 @@ class HBNBCommand(cmd.Cmd):
         """PRINTS the string representation of an instance based on the
         class name and id.
         Ex: $ show BaseModel 1234-1234-1234"""
+        args = line.split(" ")
+        all_models = storage.all()
+        if len(args) < 1:
+            print("**class name missing**")
+        elif args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        else:
+            key_name = args[0] + '.' + args[1]
+        try:
+            print(all_models[key_name])
+        except:
+            print("** no instance found **")
 
     def do_destroy(self, line):
         """DELETES an instance based on the class name and id
         (save the change into the JSON file).
         Ex: $ destroy BaseModel 1234-1234-1234"""
-        args = line.split()
+
+    def do_all(self, line):
+        """ PRINTS all string representation of all instances based
+        or not on the class name
+        Ex: $ all BaseModel or $ all"""
+
+    def do_update(self, line):
+        """Updates an instance based on the class name
+        and id by adding or updating attribute"""
 
     def do_EOF(self, line):
         """EOF command to exit the program"""
