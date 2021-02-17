@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ create BaseModel"""
         if len(line) < 1:
             print("** class name missing **")
-            return
+            return True
         if line in HBNBCommand.classes:
             model = eval(line + "()")
             model.save()
@@ -39,9 +39,10 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ show BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) < 1:
+        if len(args) == 0:
             print("**class name missing**")
-        elif args[0] not in HBNBCommand.classes:
+            return True
+        if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
@@ -56,6 +57,21 @@ class HBNBCommand(cmd.Cmd):
         """DELETES an instance based on the class name and id
         (save the change into the JSON file).
         Ex: $ destroy BaseModel 1234-1234-1234"""
+        args = line.split(" ")
+        all_models = storage.all()
+        if len(args) == 0:
+            print("**class name missing**")
+            return True
+        if args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        else:
+            key_name = args[0] + '.' + args[1]
+        try:
+            del(all_models[key_name])
+        except:
+            print("** no instance found **")
 
     def do_all(self, line):
         """ PRINTS all string representation of all instances based
@@ -71,7 +87,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def do_quit(self, line):
+    def do_quit(self):
         """Quit command to exit the program"""
         return True
 
