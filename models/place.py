@@ -1,5 +1,6 @@
 #!/usr/bin/python3
 """This module creates a class Place that inherits from BaseModel"""
+from models.base_model import BaseModel
 
 
 class Place(BaseModel):
