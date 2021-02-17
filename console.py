@@ -25,7 +25,7 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ create BaseModel"""
         if len(line) < 1:
             print("** class name missing **")
-            return True
+            return
         if line in HBNBCommand.classes:
             model = eval(line + "()")
             model.save()
@@ -39,9 +39,9 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ show BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) == 0:
+        if len(args) < 1:
             print("**class name missing**")
-            return True
+            return
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
@@ -59,9 +59,9 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ destroy BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) == 0:
+        if len(args) < 1:
             print("**class name missing**")
-            return True
+            return
         if args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
@@ -77,12 +77,32 @@ class HBNBCommand(cmd.Cmd):
         """ PRINTS all string representation of all instances based
         or not on the class name
         Ex: $ all BaseModel or $ all"""
+        args = line.split(" ")
+        all_models = storage.all()
+        if args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
 
     def do_update(self, line):
         """Updates an instance based on the class name
-        and id by adding or updating attribute"""
+        and id by adding or updating attribute
+        Ex: $ update BaseModel 1234-1234-1234
+        email "aibnb@holbertonschool.com
+        Usage:update <class name> <id> <attribute name>
+        "<attribute value>"""""
+        args = line.split(" ")
+        all_models = storage.all()
+        if len(args) < 1:
+            print("**class name missing**")
+        elif args[0] not in HBNBCommand.classes:
+            print("** class doesn't exist **")
+        elif len(args) < 2:
+            print("** instance id missing **")
+        elif len(args) < 3:
+            print("** attribute name missing **")
+        elif len(args) < 4:
+            print("** value missing **")
 
-    def do_EOF(self, line):
+    def do_EOF(self):
         """EOF command to exit the program"""
         print()
         return True
