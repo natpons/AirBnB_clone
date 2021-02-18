@@ -47,7 +47,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
-            if key_name in all_models():
+            if key_name in models.storage.all():
                 print(all_models[key_name])
             else:
                 print("** no instance found **")
@@ -58,7 +58,7 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ destroy BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) < 1:
+        if len(args) == 0:
             print("**class name missing**")
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
@@ -66,7 +66,7 @@ class HBNBCommand(cmd.Cmd):
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
-            if key_name in all_models():
+            if key_name in models.storage.all():
                 del(all_models[key_name])
             else:
                 print("** no instance found **")
@@ -108,11 +108,11 @@ class HBNBCommand(cmd.Cmd):
             print("** value missing **")
         else:
             key_name = args[0] + '.' + args[1]
-            try:
+            if key_name in models.storage.all():
                 model = all_models[key_name]
                 setattr(model, args[2], args[3])
                 storage.save()
-            except:
+            else:
                 print("** no instance found **")
 
     def do_EOF(self):
@@ -120,7 +120,7 @@ class HBNBCommand(cmd.Cmd):
         print()
         return True
 
-    def do_quit(self):
+    def do_quit(self, line):
         """Quit command to exit the program"""
         return True
 
