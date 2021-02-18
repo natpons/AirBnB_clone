@@ -77,10 +77,17 @@ class HBNBCommand(cmd.Cmd):
         """ PRINTS all string representation of all instances based
         or not on the class name
         Ex: $ all BaseModel or $ all"""
-        args = line.split(" ")
         all_models = storage.all()
-        if args[0] not in HBNBCommand.classes:
-            print("** class doesn't exist **")
+        if len(line) < 1:
+            for model_id in all_models.keys():
+                print("{}", format(all_models[model_id]))
+        else:
+            if line not in HBNBCommand.classes:
+                print("** class doesn't exist **")
+            else:
+                for key, value in all_models.items():
+                    if key.split(".")[0] == line:
+                        print("{}", format(all_models[key]))
 
     def do_update(self, line):
         """Updates an instance based on the class name
