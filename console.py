@@ -41,17 +41,16 @@ class HBNBCommand(cmd.Cmd):
         all_models = storage.all()
         if len(args) < 1:
             print("**class name missing**")
-            return
-        if args[0] not in HBNBCommand.classes:
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
-        try:
-            print(all_models[key_name])
-        except:
-            print("** no instance found **")
+            if key_name in all_models():
+                print(all_models[key_name])
+            else:
+                print("** no instance found **")
 
     def do_destroy(self, line):
         """DELETES an instance based on the class name and id
@@ -61,17 +60,16 @@ class HBNBCommand(cmd.Cmd):
         all_models = storage.all()
         if len(args) < 1:
             print("**class name missing**")
-            return
-        if args[0] not in HBNBCommand.classes:
+        elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
-        try:
-            del(all_models[key_name])
-        except:
-            print("** no instance found **")
+            if key_name in all_models():
+                del(all_models[key_name])
+            else:
+                print("** no instance found **")
 
     def do_all(self, line):
         """ PRINTS all string representation of all instances based
