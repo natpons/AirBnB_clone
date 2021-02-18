@@ -80,14 +80,14 @@ class HBNBCommand(cmd.Cmd):
         all_models = storage.all()
         if len(line) < 1:
             for model_id in all_models.keys():
-                print("{}", format(all_models[model_id]))
+                print("{}".format(all_models[model_id]))
         else:
             if line not in HBNBCommand.classes:
                 print("** class doesn't exist **")
             else:
                 for key, value in all_models.items():
                     if key.split(".")[0] == line:
-                        print("{}", format(all_models[key]))
+                        print("{}".format(all_models[key]))
 
     def do_update(self, line):
         """Updates an instance based on the class name
@@ -108,6 +108,14 @@ class HBNBCommand(cmd.Cmd):
             print("** attribute name missing **")
         elif len(args) < 4:
             print("** value missing **")
+        else:
+            key_name = args[0] + '.' + args[1]
+            try:
+                model = all_models[key_name]
+                setattr(model, args[2], args[3])
+                storage.save()
+            except:
+                print("** no instance found **")
 
     def do_EOF(self):
         """EOF command to exit the program"""
