@@ -39,11 +39,11 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ show BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) < 1:
-            print("**class name missing**")
+        if len(line) < 1:
+            print("** class name missing **")
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args) < 2:
+        elif len(line) < 2:
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
@@ -58,11 +58,11 @@ class HBNBCommand(cmd.Cmd):
         Ex: $ destroy BaseModel 1234-1234-1234"""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) == 0:
-            print("**class name missing**")
-        elif args[0] not in HBNBCommand.classes:
+        if len(line) < 1:
+            print("** class name missing **")
+        elif len(args) != 0 and args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
-        elif len(args) < 2:
+        elif len(args) < 2 and args[0] in HBNBCommand.classes:
             print("** instance id missing **")
         else:
             key_name = args[0] + '.' + args[1]
@@ -76,16 +76,18 @@ class HBNBCommand(cmd.Cmd):
         or not on the class name
         Ex: $ all BaseModel or $ all"""
         all_models = storage.all()
+        my_list = []
         if len(line) < 1:
             for model_id in all_models.keys():
-                print("{}".format(all_models[model_id]))
+                my_list.append(all_models[model_id].__str__())
         else:
             if line not in HBNBCommand.classes:
                 print("** class doesn't exist **")
             else:
                 for key, value in all_models.items():
                     if key.split(".")[0] == line:
-                        print("{}".format(all_models[key]))
+                        my_list.append(all_models[key].__str__())
+        print(my_list)
 
     def do_update(self, line):
         """Updates an instance based on the class name
@@ -96,8 +98,8 @@ class HBNBCommand(cmd.Cmd):
         "<attribute value>"""""
         args = line.split(" ")
         all_models = storage.all()
-        if len(args) < 1:
-            print("**class name missing**")
+        if len(line) < 1:
+            print("** class name missing **")
         elif args[0] not in HBNBCommand.classes:
             print("** class doesn't exist **")
         elif len(args) < 2:
